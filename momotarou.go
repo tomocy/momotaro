@@ -9,9 +9,9 @@ type Momotarou struct {
 }
 
 type runner interface {
-	run() error
+	Run() error
 }
 
 func (m *Momotarou) Run() error {
-	return m.runner.run()
+	return m.runner.Run()
 }
