@@ -1,4 +1,4 @@
-# momotarou
+# Momotarou
 
 a CLI client for [Kibidango](https://github.com/tomocy/kibidango) (a container from scratch)
 
