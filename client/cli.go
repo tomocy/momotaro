@@ -7,26 +7,26 @@ import (
 	"github.com/tomocy/kibidango/engine/container"
 	createrPkg "github.com/tomocy/kibidango/engine/creater"
 	initializerPkg "github.com/tomocy/kibidango/engine/initializer"
-	"github.com/urfave/cli"
+	cliPkg "github.com/urfave/cli"
 )
 
-func NewCLI() *CLI {
-	c := new(CLI)
+func newCLI() *cli {
+	c := new(cli)
 	c.init()
 	return c
 }
 
-type CLI struct {
-	app *cli.App
+type cli struct {
+	app *cliPkg.App
 }
 
-func (c *CLI) init() {
-	c.app = cli.NewApp()
+func (c *cli) init() {
+	c.app = cliPkg.NewApp()
 	c.initBasic()
 	c.initCommands()
 }
 
-func (c *CLI) initBasic() {
+func (c *cli) initBasic() {
 	c.app.Name = name
 	c.app.Usage = usage
 	c.app.Version = version
@@ -38,8 +38,8 @@ const (
 	version = "0.0.1"
 )
 
-func (c *CLI) initCommands() {
-	c.app.Commands = []cli.Command{
+func (c *cli) initCommands() {
+	c.app.Commands = []cliPkg.Command{
 		{
 			Name:   "create",
 			Action: create,
@@ -51,11 +51,11 @@ func (c *CLI) initCommands() {
 	}
 }
 
-func (c *CLI) Run(args []string) error {
+func (c *cli) Run(args []string) error {
 	return c.app.Run(args)
 }
 
-func create(ctx *cli.Context) error {
+func create(ctx *cliPkg.Context) error {
 	ctner := new(container.Container)
 	creater := creater(runtime.GOOS)
 	return ctner.Create(creater, "init")
@@ -70,7 +70,7 @@ func creater(os string) container.Creater {
 	}
 }
 
-func initialize(ctx *cli.Context) error {
+func initialize(ctx *cliPkg.Context) error {
 	ctner := new(container.Container)
 	initer := initializer(runtime.GOOS)
 	return ctner.Init(initer)
