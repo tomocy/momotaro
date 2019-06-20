@@ -4,9 +4,9 @@ import (
 	osPkg "os"
 	"runtime"
 
-	"github.com/tomocy/kibidango/engine/container"
-	createrPkg "github.com/tomocy/kibidango/engine/creater"
-	initializerPkg "github.com/tomocy/kibidango/engine/initializer"
+	"github.com/tomocy/kibidango"
+	createrPkg "github.com/tomocy/kibidango/creater"
+	initializerPkg "github.com/tomocy/kibidango/initializer"
 	cliPkg "github.com/urfave/cli"
 )
 
@@ -56,12 +56,12 @@ func (c *cli) Run(args []string) error {
 }
 
 func create(ctx *cliPkg.Context) error {
-	ctner := new(container.Container)
+	ctner := new(kibidango.Kibidango)
 	creater := creater(runtime.GOOS)
 	return ctner.Create(creater, "init")
 }
 
-func creater(os string) container.Creater {
+func creater(os string) kibidango.Creater {
 	switch os {
 	case osLinux:
 		return createrPkg.ForLinux(osPkg.Stdin, osPkg.Stdout, osPkg.Stderr)
@@ -71,12 +71,12 @@ func creater(os string) container.Creater {
 }
 
 func initialize(ctx *cliPkg.Context) error {
-	ctner := new(container.Container)
+	ctner := new(kibidango.Kibidango)
 	initer := initializer(runtime.GOOS)
 	return ctner.Init(initer)
 }
 
-func initializer(os string) container.Initializer {
+func initializer(os string) kibidango.Initializer {
 	switch os {
 	case osLinux:
 		return initializerPkg.ForLinux("/root/container")
