@@ -1,7 +1,11 @@
 package momotarou
 
+import "github.com/tomocy/momotarou/client"
+
 func New() *Momotarou {
-	return new(Momotarou)
+	return &Momotarou{
+		runner: client.NewCLI(),
+	}
 }
 
 type Momotarou struct {
