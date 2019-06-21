@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tomocy/momotarou/client"
+	"github.com/tomocy/momotaro/client"
 )
 
 func main() {
