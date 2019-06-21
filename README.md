@@ -4,7 +4,7 @@ a CLI client for [Kibidango](https://github.com/tomocy/kibidango) (a container f
 
 ### Environment
 ```
-docker run --rm -it -v $GOPATH:/go -w /go/src/github.com/tomocy/momotaro --privileged golang:alpine
+docker run -it -v $GOPATH:/go -w /go/src/github.com/tomocy/momotaro --rm --privileged golang:alpine
 ```
 
 ### Usage
