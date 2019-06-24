@@ -57,19 +57,19 @@ func (c *cli) Run(args []string) error {
 }
 
 func create(ctx *cliPkg.Context) error {
-	ctner := new(kibidango.Kibidango)
+	kibi := new(kibidango.Kibidango)
 
 	id := ctx.Args().First()
-	if err := ctner.UpdateID(id); err != nil {
+	if err := kibi.UpdateID(id); err != nil {
 		return err
 	}
 
 	creater := creater(runtime.GOOS)
-	if err := ctner.Create(creater, "init"); err != nil {
+	if err := kibi.Create(creater, "init"); err != nil {
 		return err
 	}
 
-	return save(ctner)
+	return save(kibi)
 }
 
 func creater(os string) kibidango.Creater {
@@ -81,9 +81,9 @@ func creater(os string) kibidango.Creater {
 	}
 }
 
-func save(ctner *kibidango.Kibidango) error {
+func save(kibi *kibidango.Kibidango) error {
 	saver := saver(runtime.GOOS)
-	return ctner.Save(saver)
+	return kibi.Save(saver)
 }
 
 func saver(os string) kibidango.Saver {
@@ -96,9 +96,9 @@ func saver(os string) kibidango.Saver {
 }
 
 func initialize(ctx *cliPkg.Context) error {
-	ctner := new(kibidango.Kibidango)
+	kibi := new(kibidango.Kibidango)
 	initer := initializer(runtime.GOOS)
-	return ctner.Init(initer)
+	return kibi.Init(initer)
 }
 
 func initializer(os string) kibidango.Initializer {
