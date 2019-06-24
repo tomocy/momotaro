@@ -57,6 +57,12 @@ func (c *cli) Run(args []string) error {
 
 func create(ctx *cliPkg.Context) error {
 	ctner := new(kibidango.Kibidango)
+
+	id := ctx.Args().First()
+	if err := ctner.UpdateID(id); err != nil {
+		return err
+	}
+
 	creater := creater(runtime.GOOS)
 	return ctner.Create(creater, "init")
 }
