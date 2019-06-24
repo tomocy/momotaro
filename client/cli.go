@@ -7,6 +7,7 @@ import (
 	"github.com/tomocy/kibidango"
 	createrPkg "github.com/tomocy/kibidango/creater"
 	initializerPkg "github.com/tomocy/kibidango/initializer"
+	saverPkg "github.com/tomocy/kibidango/saver"
 	cliPkg "github.com/urfave/cli"
 )
 
@@ -64,13 +65,31 @@ func create(ctx *cliPkg.Context) error {
 	}
 
 	creater := creater(runtime.GOOS)
-	return ctner.Create(creater, "init")
+	if err := ctner.Create(creater, "init"); err != nil {
+		return err
+	}
+
+	return save(ctner)
 }
 
 func creater(os string) kibidango.Creater {
 	switch os {
 	case osLinux:
 		return createrPkg.ForLinux(osPkg.Stdin, osPkg.Stdout, osPkg.Stderr)
+	default:
+		return nil
+	}
+}
+
+func save(ctner *kibidango.Kibidango) error {
+	saver := saver(runtime.GOOS)
+	return ctner.Save(saver)
+}
+
+func saver(os string) kibidango.Saver {
+	switch os {
+	case osLinux:
+		return saverPkg.ForLinux()
 	default:
 		return nil
 	}
