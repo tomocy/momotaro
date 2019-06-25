@@ -70,22 +70,12 @@ func create(ctx *cliPkg.Context) error {
 	if err := kibi.UpdateID(id); err != nil {
 		return err
 	}
-
-	cloner := cloner(runtime.GOOS)
-	if err := kibi.Clone(cloner, "init"); err != nil {
+	if err := save(kibi); err != nil {
 		return err
 	}
 
-	return save(kibi)
-}
-
-func cloner(os string) kibidango.Cloner {
-	switch os {
-	case osLinux:
-		return clonerPkg.ForLinux(osPkg.Stdin, osPkg.Stdout, osPkg.Stderr)
-	default:
-		return nil
-	}
+	cloner := cloner(runtime.GOOS)
+	return kibi.Clone(cloner, "init")
 }
 
 func save(kibi *kibidango.Kibidango) error {
@@ -97,6 +87,15 @@ func saver(os string) kibidango.Saver {
 	switch os {
 	case osLinux:
 		return saverPkg.ForLinux()
+	default:
+		return nil
+	}
+}
+
+func cloner(os string) kibidango.Cloner {
+	switch os {
+	case osLinux:
+		return clonerPkg.ForLinux(osPkg.Stdin, osPkg.Stdout, osPkg.Stderr)
 	default:
 		return nil
 	}
