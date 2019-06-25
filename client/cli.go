@@ -45,15 +45,20 @@ const (
 func (c *cli) initCommands() {
 	c.app.Commands = []cliPkg.Command{
 		{
-			Name:   "create",
-			Action: create,
+			Name:      "create",
+			Usage:     "create a kibidango",
+			ArgsUsage: "id",
+			Action:    create,
 		},
 		{
-			Name:   "init",
-			Action: initialize,
+			Name:      "init",
+			Usage:     "initialize a kibidango",
+			ArgsUsage: "id",
+			Action:    initialize,
 		},
 		{
 			Name:   "list",
+			Usage:  "list all kibidangos",
 			Action: list,
 		},
 	}
