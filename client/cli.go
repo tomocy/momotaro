@@ -75,7 +75,7 @@ func create(ctx *cliPkg.Context) error {
 	}
 
 	cloner := cloner(runtime.GOOS)
-	return kibi.Clone(cloner, "init")
+	return kibi.Clone(cloner, "init", id)
 }
 
 func save(kibi *kibidango.Kibidango) error {
@@ -102,9 +102,28 @@ func cloner(os string) kibidango.Cloner {
 }
 
 func initialize(ctx *cliPkg.Context) error {
-	kibi := new(kibidango.Kibidango)
+	id := ctx.Args().First()
+	kibi, err := load(id)
+	if err != nil {
+		return err
+	}
+
 	initer := initializer(runtime.GOOS)
 	return kibi.Init(initer)
+}
+
+func load(id string) (*kibidango.Kibidango, error) {
+	kibi := new(kibidango.Kibidango)
+	if err := kibi.UpdateID(id); err != nil {
+		return nil, err
+	}
+
+	loader := loader(runtime.GOOS)
+	if err := kibi.Load(loader); err != nil {
+		return nil, err
+	}
+
+	return kibi, nil
 }
 
 func initializer(os string) kibidango.Initializer {
