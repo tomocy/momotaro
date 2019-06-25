@@ -11,6 +11,7 @@ import (
 	listerPkg "github.com/tomocy/kibidango/lister"
 	loaderPkg "github.com/tomocy/kibidango/loader"
 	saverPkg "github.com/tomocy/kibidango/saver"
+	terminatorPkg "github.com/tomocy/kibidango/terminator"
 	cliPkg "github.com/urfave/cli"
 )
 
@@ -60,6 +61,11 @@ func (c *cli) initCommands() {
 			Name:   "list",
 			Usage:  "list all kibidangos",
 			Action: list,
+		},
+		{
+			Name:   "delete",
+			Usage:  "delete a kibidango",
+			Action: delete,
 		},
 	}
 }
@@ -187,6 +193,26 @@ type printable kibidango.Kibidango
 
 func (k printable) String() string {
 	return fmt.Sprintf("%s", k.ID)
+}
+
+func delete(ctx *cliPkg.Context) error {
+	id := ctx.Args().First()
+	kibi, err := load(id)
+	if err != nil {
+		return err
+	}
+
+	terminator := terminator(runtime.GOOS)
+	return kibi.Terminate(terminator)
+}
+
+func terminator(os string) kibidango.Terminator {
+	switch os {
+	case osLinux:
+		return terminatorPkg.ForLinux()
+	default:
+		return nil
+	}
 }
 
 const (
