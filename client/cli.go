@@ -47,13 +47,13 @@ func (c *cli) initCommands() {
 	c.app.Commands = []cliPkg.Command{
 		{
 			Name:      "create",
-			Usage:     "create a kibidango",
+			Usage:     "create a kibidango with given id",
 			ArgsUsage: "id",
 			Action:    create,
 		},
 		{
 			Name:      "init",
-			Usage:     "initialize a kibidango",
+			Usage:     "initialize a kibidango with given id",
 			ArgsUsage: "id",
 			Action:    initialize,
 		},
@@ -64,7 +64,7 @@ func (c *cli) initCommands() {
 		},
 		{
 			Name:   "delete",
-			Usage:  "delete a kibidango",
+			Usage:  "delete a kibidango with given id",
 			Action: delete,
 		},
 	}
