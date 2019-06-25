@@ -1,12 +1,15 @@
 package client
 
 import (
+	"fmt"
 	osPkg "os"
 	"runtime"
 
 	"github.com/tomocy/kibidango"
 	clonerPkg "github.com/tomocy/kibidango/cloner"
 	initializerPkg "github.com/tomocy/kibidango/initializer"
+	listerPkg "github.com/tomocy/kibidango/lister"
+	loaderPkg "github.com/tomocy/kibidango/loader"
 	saverPkg "github.com/tomocy/kibidango/saver"
 	cliPkg "github.com/urfave/cli"
 )
@@ -48,6 +51,10 @@ func (c *cli) initCommands() {
 		{
 			Name:   "init",
 			Action: initialize,
+		},
+		{
+			Name:   "list",
+			Action: list,
 		},
 	}
 }
@@ -108,6 +115,55 @@ func initializer(os string) kibidango.Initializer {
 	default:
 		return nil
 	}
+}
+
+func list(*cliPkg.Context) error {
+	loader := loader(runtime.GOOS)
+	lister := lister(runtime.GOOS)
+	kibis, err := kibidango.List(lister, loader)
+	if err != nil {
+		return err
+	}
+
+	print(kibis)
+
+	return nil
+}
+
+func loader(os string) kibidango.Loader {
+	switch os {
+	case osLinux:
+		return loaderPkg.ForLinux()
+	default:
+		return nil
+	}
+}
+
+func lister(os string) kibidango.Lister {
+	switch os {
+	case osLinux:
+		return listerPkg.ForLinux()
+	default:
+		return nil
+	}
+}
+
+func print(kibis []*kibidango.Kibidango) {
+	printHeader()
+	for _, kibi := range kibis {
+		printable := printable(*kibi)
+		fmt.Println(printable)
+	}
+}
+
+func printHeader() {
+	fmt.Println("ID")
+}
+
+type printable kibidango.Kibidango
+
+func (k printable) String() string {
+	return fmt.Sprintf("%s", k.ID)
 }
 
 const (
