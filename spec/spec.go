@@ -1,9 +1,18 @@
 package spec
 
-type Spec struct {
-	Process *Process
+import (
+	"github.com/opencontainers/runtime-spec/specs-go"
+	"github.com/tomocy/kibidango"
+)
+
+func convertOCISpec(ociSpec *specs.Spec) *spec {
+	return &spec{
+		process: &kibidango.Process{
+			Args: ociSpec.Process.Args,
+		},
+	}
 }
 
-type Process struct {
-	Args []string
+type spec struct {
+	process *kibidango.Process
 }
