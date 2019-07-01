@@ -12,6 +12,7 @@ import (
 	loaderPkg "github.com/tomocy/kibidango/loader"
 	saverPkg "github.com/tomocy/kibidango/saver"
 	terminatorPkg "github.com/tomocy/kibidango/terminator"
+	"github.com/tomocy/momotaro/spec"
 	cliPkg "github.com/urfave/cli"
 )
 
@@ -75,10 +76,8 @@ func (c *cli) Run(args []string) error {
 }
 
 func create(ctx *cliPkg.Context) error {
-	kibi := new(kibidango.Kibidango)
-
-	id := ctx.Args().First()
-	if err := kibi.UpdateID(id); err != nil {
+	kibi, err := createKibidango(ctx)
+	if err != nil {
 		return err
 	}
 	if err := save(kibi); err != nil {
@@ -86,7 +85,23 @@ func create(ctx *cliPkg.Context) error {
 	}
 
 	cloner := cloner(runtime.GOOS)
-	return kibi.Clone(cloner, "init", id)
+	return kibi.Clone(cloner, "init", kibi.ID)
+}
+
+func createKibidango(ctx *cliPkg.Context) (*kibidango.Kibidango, error) {
+	kibi := new(kibidango.Kibidango)
+
+	specLoader := spec.ForOCI(kibi)
+	if err := specLoader.Load("./config.json"); err != nil {
+		return nil, err
+	}
+
+	id := ctx.Args().First()
+	if err := kibi.UpdateID(id); err != nil {
+		return nil, err
+	}
+
+	return kibi, nil
 }
 
 func save(kibi *kibidango.Kibidango) error {
