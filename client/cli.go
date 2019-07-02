@@ -6,7 +6,7 @@ import (
 	"runtime"
 
 	"github.com/tomocy/kibidango"
-	clonerPkg "github.com/tomocy/kibidango/cloner"
+	createrPkg "github.com/tomocy/kibidango/creater"
 	initializerPkg "github.com/tomocy/kibidango/initializer"
 	listerPkg "github.com/tomocy/kibidango/lister"
 	loaderPkg "github.com/tomocy/kibidango/loader"
@@ -84,8 +84,8 @@ func create(ctx *cliPkg.Context) error {
 		return err
 	}
 
-	cloner := cloner(runtime.GOOS)
-	return kibi.Clone(cloner, "init", kibi.ID)
+	creater := creater(runtime.GOOS)
+	return kibi.Create(creater, "init", kibi.ID)
 }
 
 func createKibidango(ctx *cliPkg.Context) (*kibidango.Kibidango, error) {
@@ -118,10 +118,10 @@ func saver(os string) kibidango.Saver {
 	}
 }
 
-func cloner(os string) kibidango.Cloner {
+func creater(os string) kibidango.Creater {
 	switch os {
 	case osLinux:
-		return clonerPkg.ForLinux(osPkg.Stdin, osPkg.Stdout, osPkg.Stderr)
+		return createrPkg.ForLinux(osPkg.Stdin, osPkg.Stdout, osPkg.Stderr)
 	default:
 		return nil
 	}
