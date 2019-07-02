@@ -10,5 +10,5 @@ docker run -it -v $GOPATH:/go -w /go/src/github.com/tomocy/momotaro --rm --privi
 ### Usage
 - create a kibidango
     ```
-    go run main.go create
+    go run main.go create ${container id}
     ```
