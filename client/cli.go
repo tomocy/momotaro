@@ -1,6 +1,8 @@
 package client
 
 import (
+	"runtime"
+
 	cliPkg "github.com/urfave/cli"
 )
 
@@ -32,8 +34,22 @@ const (
 	version = "0.0.1"
 )
 
-func (c *cli) initCommands() {}
+func (c *cli) initCommands() {
+	c.app.Commands = []cliPkg.Command{
+		cliPkg.Command{
+			Name:   "create",
+			Action: c.create,
+		},
+	}
+}
 
 func (c *cli) Run(args []string) error {
 	return c.app.Run(args)
+}
+
+func (c *cli) create(ctx *cliPkg.Context) error {
+	id := ctx.Args().First()
+
+	creater := newCreater(runtime.GOOS)
+	return creater.create(id)
 }
