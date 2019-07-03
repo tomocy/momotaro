@@ -34,6 +34,7 @@ type factory interface {
 
 type kibidango interface {
 	Run(args ...string) error
+	Init() error
 }
 
 const (

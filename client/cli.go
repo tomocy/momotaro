@@ -42,6 +42,10 @@ func (c *cli) setCommands() {
 			Name:   "create",
 			Action: c.create,
 		},
+		cliPkg.Command{
+			Name:   "init",
+			Action: c.init,
+		},
 	}
 }
 
@@ -59,6 +63,18 @@ func (c *cli) create(ctx *cliPkg.Context) error {
 	}
 
 	return kibi.Run()
+}
+
+func (c *cli) init(ctx *cliPkg.Context) error {
+	id := ctx.Args().First()
+	factory := c.factory()
+
+	kibi, err := factory.load(id)
+	if err != nil {
+		return err
+	}
+
+	return kibi.Init()
 }
 
 func (c *cli) factory() factory {
