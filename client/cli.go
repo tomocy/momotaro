@@ -13,10 +13,12 @@ func newCLI() *cli {
 }
 
 type cli struct {
+	os  string
 	app *cliPkg.App
 }
 
 func (c *cli) init() {
+	c.os = runtime.GOOS
 	c.app = cliPkg.NewApp()
 	c.initBasic()
 	c.initCommands()
@@ -49,7 +51,7 @@ func (c *cli) Run(args []string) error {
 
 func (c *cli) create(ctx *cliPkg.Context) error {
 	id := ctx.Args().First()
-	factory := newFactory(runtime.GOOS)
+	factory := newFactory(c.os)
 
 	return factory.create(id)
 }
