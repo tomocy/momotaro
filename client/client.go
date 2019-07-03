@@ -32,6 +32,7 @@ type factory interface {
 	list() ([]kibidango, error)
 	create(id string) (kibidango, error)
 	load(id string) (kibidango, error)
+	delete(id string) error
 }
 
 func newPrinter(os string) printer {

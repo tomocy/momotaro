@@ -47,6 +47,11 @@ func (l *linux) load(id string) (kibidango, error) {
 	return factory.Load(id)
 }
 
+func (l *linux) delete(id string) error {
+	factory := l.factory()
+	return factory.Delete(id)
+}
+
 func (l *linux) factory() *factoryPkg.Linux {
 	return factoryPkg.ForLinux()
 }
