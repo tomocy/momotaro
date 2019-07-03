@@ -29,6 +29,7 @@ func newFactory(os string) factory {
 
 type factory interface {
 	create(id string) (kibidango, error)
+	load(id string) (kibidango, error)
 }
 
 type kibidango interface {

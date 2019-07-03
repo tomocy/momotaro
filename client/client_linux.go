@@ -20,6 +20,11 @@ func (l *linux) create(id string) (kibidango, error) {
 	return kibi, nil
 }
 
+func (l *linux) load(id string) (kibidango, error) {
+	factory := l.factory()
+	return factory.Load(id)
+}
+
 func (l *linux) factory() *factoryPkg.Linux {
 	return factoryPkg.ForLinux()
 }
