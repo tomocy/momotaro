@@ -19,12 +19,11 @@ func (c *Client) Run(args []string) error {
 }
 
 func newFactory(os string) factory {
-	switch os {
-	case osLinux:
-		return new(linux)
-	default:
-		return nil
+	if factory, ok := newOnOS(os).(factory); ok {
+		return factory
 	}
+
+	return nil
 }
 
 type factory interface {
@@ -34,12 +33,11 @@ type factory interface {
 }
 
 func newPrinter(os string) printer {
-	switch os {
-	case osLinux:
-		return new(linux)
-	default:
-		return nil
+	if printer, ok := newOnOS(os).(printer); ok {
+		return printer
 	}
+
+	return nil
 }
 
 type printer interface {
@@ -49,6 +47,15 @@ type printer interface {
 type kibidango interface {
 	Run(args ...string) error
 	Init() error
+}
+
+func newOnOS(os string) interface{} {
+	switch os {
+	case osLinux:
+		return new(linux)
+	default:
+		return nil
+	}
 }
 
 const (
