@@ -12,6 +12,9 @@ func (l *linux) create(id string) error {
 	if err != nil {
 		return err
 	}
+	if err := kibi.Run(); err != nil {
+		return err
+	}
 
 	return factory.Save(kibi)
 }
