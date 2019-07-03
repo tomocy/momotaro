@@ -53,7 +53,8 @@ func (c *cli) create(ctx *cliPkg.Context) error {
 	id := ctx.Args().First()
 	factory := c.factory()
 
-	return factory.create(id)
+	_, err := factory.create(id)
+	return err
 }
 
 func (c *cli) factory() factory {

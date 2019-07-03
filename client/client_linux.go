@@ -6,17 +6,18 @@ import (
 
 type linux struct{}
 
-func (l *linux) create(id string) error {
+func (l *linux) create(id string) (kibidango, error) {
 	factory := l.factory()
 	kibi, err := factory.Manufacture(id)
 	if err != nil {
-		return err
-	}
-	if err := kibi.Run(); err != nil {
-		return err
+		return nil, err
 	}
 
-	return factory.Save(kibi)
+	if err := factory.Save(kibi); err != nil {
+		return nil, err
+	}
+
+	return kibi, nil
 }
 
 func (l *linux) factory() *factoryPkg.Linux {
