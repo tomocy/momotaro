@@ -51,7 +51,11 @@ func (c *cli) Run(args []string) error {
 
 func (c *cli) create(ctx *cliPkg.Context) error {
 	id := ctx.Args().First()
-	factory := newFactory(c.os)
+	factory := c.factory()
 
 	return factory.create(id)
+}
+
+func (c *cli) factory() factory {
+	return newFactory(c.os)
 }
