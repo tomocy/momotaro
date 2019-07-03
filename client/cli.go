@@ -62,7 +62,7 @@ func (c *cli) create(ctx *cliPkg.Context) error {
 		return err
 	}
 
-	return kibi.Run()
+	return kibi.Run("init", id)
 }
 
 func (c *cli) init(ctx *cliPkg.Context) error {
