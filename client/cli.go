@@ -1,38 +1,31 @@
 package client
 
 import (
-	"fmt"
-	osPkg "os"
 	"runtime"
 
-	"github.com/tomocy/kibidango"
-	clonerPkg "github.com/tomocy/kibidango/cloner"
-	initializerPkg "github.com/tomocy/kibidango/initializer"
-	listerPkg "github.com/tomocy/kibidango/lister"
-	loaderPkg "github.com/tomocy/kibidango/loader"
-	saverPkg "github.com/tomocy/kibidango/saver"
-	terminatorPkg "github.com/tomocy/kibidango/terminator"
 	"github.com/tomocy/momotaro/spec"
 	cliPkg "github.com/urfave/cli"
 )
 
 func newCLI() *cli {
 	c := new(cli)
-	c.init()
+	c.setUp()
 	return c
 }
 
 type cli struct {
+	os  string
 	app *cliPkg.App
 }
 
-func (c *cli) init() {
+func (c *cli) setUp() {
+	c.os = runtime.GOOS
 	c.app = cliPkg.NewApp()
-	c.initBasic()
-	c.initCommands()
+	c.setBasic()
+	c.setCommands()
 }
 
-func (c *cli) initBasic() {
+func (c *cli) setBasic() {
 	c.app.Name = name
 	c.app.Usage = usage
 	c.app.Version = version
@@ -44,29 +37,30 @@ const (
 	version = "0.0.1"
 )
 
-func (c *cli) initCommands() {
+func (c *cli) setCommands() {
 	c.app.Commands = []cliPkg.Command{
-		{
-			Name:      "create",
-			Usage:     "create a kibidango with given id",
-			ArgsUsage: "id",
-			Action:    create,
+		cliPkg.Command{
+			Name:   "list",
+			Usage:  "list all kibidangos",
+			Action: c.list,
 		},
-		{
+		cliPkg.Command{
+			Name:      "create",
+			Usage:     "create a kibidango with give id",
+			ArgsUsage: "id",
+			Action:    c.create,
+		},
+		cliPkg.Command{
 			Name:      "init",
 			Usage:     "initialize a kibidango with given id",
 			ArgsUsage: "id",
-			Action:    initialize,
+			Action:    c.init,
 		},
-		{
-			Name:   "list",
-			Usage:  "list all kibidangos",
-			Action: list,
-		},
-		{
-			Name:   "delete",
-			Usage:  "delete a kibidango with given id",
-			Action: delete,
+		cliPkg.Command{
+			Name:      "delete",
+			Usage:     "delete a kibidango with given id",
+			ArgsUsage: "id",
+			Action:    c.delete,
 		},
 	}
 }
@@ -75,161 +69,63 @@ func (c *cli) Run(args []string) error {
 	return c.app.Run(args)
 }
 
-func create(ctx *cliPkg.Context) error {
-	kibi, err := createKibidango(ctx)
-	if err != nil {
-		return err
-	}
-	if err := save(kibi); err != nil {
-		return err
-	}
-
-	cloner := cloner(runtime.GOOS)
-	return kibi.Clone(cloner, "init", kibi.ID)
-}
-
-func createKibidango(ctx *cliPkg.Context) (*kibidango.Kibidango, error) {
-	kibi := new(kibidango.Kibidango)
-
-	specLoader := spec.ForOCI(kibi)
-	if err := specLoader.Load("./config.json"); err != nil {
-		return nil, err
-	}
-
-	id := ctx.Args().First()
-	if err := kibi.UpdateID(id); err != nil {
-		return nil, err
-	}
-
-	return kibi, nil
-}
-
-func save(kibi *kibidango.Kibidango) error {
-	saver := saver(runtime.GOOS)
-	return kibi.Save(saver)
-}
-
-func saver(os string) kibidango.Saver {
-	switch os {
-	case osLinux:
-		return saverPkg.ForLinux()
-	default:
-		return nil
-	}
-}
-
-func cloner(os string) kibidango.Cloner {
-	switch os {
-	case osLinux:
-		return clonerPkg.ForLinux(osPkg.Stdin, osPkg.Stdout, osPkg.Stderr)
-	default:
-		return nil
-	}
-}
-
-func initialize(ctx *cliPkg.Context) error {
-	id := ctx.Args().First()
-	kibi, err := load(id)
+func (c *cli) list(ctx *cliPkg.Context) error {
+	factory := c.factory()
+	kibis, err := factory.list()
 	if err != nil {
 		return err
 	}
 
-	initer := initializer(runtime.GOOS)
-	return kibi.Init(initer)
-}
-
-func load(id string) (*kibidango.Kibidango, error) {
-	kibi := new(kibidango.Kibidango)
-	if err := kibi.UpdateID(id); err != nil {
-		return nil, err
-	}
-
-	loader := loader(runtime.GOOS)
-	if err := kibi.Load(loader); err != nil {
-		return nil, err
-	}
-
-	return kibi, nil
-}
-
-func initializer(os string) kibidango.Initializer {
-	switch os {
-	case osLinux:
-		return initializerPkg.ForLinux("/root/container")
-	default:
-		return nil
-	}
-}
-
-func list(*cliPkg.Context) error {
-	loader := loader(runtime.GOOS)
-	lister := lister(runtime.GOOS)
-	kibis, err := kibidango.List(lister, loader)
-	if err != nil {
-		return err
-	}
-
-	print(kibis)
+	printer := c.printer()
+	printer.printAll(kibis)
 
 	return nil
 }
 
-func loader(os string) kibidango.Loader {
-	switch os {
-	case osLinux:
-		return loaderPkg.ForLinux()
-	default:
-		return nil
+func (c *cli) create(ctx *cliPkg.Context) error {
+	factory := c.factory()
+	spec, err := c.loadSpec("./config.json")
+	if err != nil {
+		return err
 	}
-}
+	spec.ID = ctx.Args().First()
 
-func lister(os string) kibidango.Lister {
-	switch os {
-	case osLinux:
-		return listerPkg.ForLinux()
-	default:
-		return nil
-	}
-}
-
-func print(kibis []*kibidango.Kibidango) {
-	printHeader()
-	for _, kibi := range kibis {
-		printable := printable(*kibi)
-		fmt.Println(printable)
-	}
-}
-
-func printHeader() {
-	fmt.Println("ID")
-}
-
-type printable kibidango.Kibidango
-
-func (k printable) String() string {
-	return fmt.Sprintf("%s", k.ID)
-}
-
-func delete(ctx *cliPkg.Context) error {
-	id := ctx.Args().First()
-	kibi, err := load(id)
+	kibi, err := factory.create(spec)
 	if err != nil {
 		return err
 	}
 
-	terminator := terminator(runtime.GOOS)
-	return kibi.Terminate(terminator)
+	return kibi.Run("init", spec.ID)
 }
 
-func terminator(os string) kibidango.Terminator {
-	switch os {
-	case osLinux:
-		return terminatorPkg.ForLinux()
-	default:
-		return nil
+func (c *cli) loadSpec(name string) (*spec.Spec, error) {
+	loader := new(spec.OCI)
+	return loader.Load(name)
+}
+
+func (c *cli) init(ctx *cliPkg.Context) error {
+	id := ctx.Args().First()
+	factory := c.factory()
+
+	kibi, err := factory.load(id)
+	if err != nil {
+		return err
 	}
+
+	return kibi.Init()
 }
 
-const (
-	osLinux = "linux"
-)
+func (c *cli) delete(ctx *cliPkg.Context) error {
+	id := ctx.Args().First()
+	factory := c.factory()
+
+	return factory.delete(id)
+}
+
+func (c *cli) factory() factory {
+	return newFactory(c.os)
+}
+
+func (c *cli) printer() printer {
+	return newPrinter(c.os)
+}
