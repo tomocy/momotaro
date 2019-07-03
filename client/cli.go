@@ -50,6 +50,6 @@ func (c *cli) Run(args []string) error {
 func (c *cli) create(ctx *cliPkg.Context) error {
 	id := ctx.Args().First()
 
-	creater := newCreater(runtime.GOOS)
-	return creater.create(id)
+	factory := newFactory(runtime.GOOS)
+	return factory.create(id)
 }

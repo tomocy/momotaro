@@ -18,7 +18,7 @@ func (c *Client) Run(args []string) error {
 	return c.runner.Run(args)
 }
 
-func newCreater(os string) creater {
+func newFactory(os string) factory {
 	switch os {
 	case osLinux:
 		return new(linux)
@@ -27,7 +27,7 @@ func newCreater(os string) creater {
 	}
 }
 
-type creater interface {
+type factory interface {
 	create(id string) error
 }
 

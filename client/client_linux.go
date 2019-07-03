@@ -1,13 +1,13 @@
 package client
 
 import (
-	"github.com/tomocy/kibidango/factory"
+	factoryPkg "github.com/tomocy/kibidango/factory"
 )
 
 type linux struct{}
 
 func (l *linux) create(id string) error {
-	factory := factory.ForLinux()
+	factory := factoryPkg.ForLinux()
 	kibi, err := factory.Manufacture(id)
 	if err != nil {
 		return err
