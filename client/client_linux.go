@@ -35,12 +35,19 @@ func (l *linux) create(spec *spec.Spec) (kibidango, error) {
 	if err != nil {
 		return nil, err
 	}
+	if err := l.letKibidangoMeetSpec(kibi, spec); err != nil {
+		return nil, err
+	}
 
 	if err := factory.Save(kibi); err != nil {
 		return nil, err
 	}
 
 	return kibi, nil
+}
+
+func (l *linux) letKibidangoMeetSpec(kibi *kibidangoPkg.Linux, spec *spec.Spec) error {
+	return kibi.UpdateProcess(spec.Process)
 }
 
 func (l *linux) load(id string) (kibidango, error) {
