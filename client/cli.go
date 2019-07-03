@@ -8,7 +8,7 @@ import (
 
 func newCLI() *cli {
 	c := new(cli)
-	c.init()
+	c.setUp()
 	return c
 }
 
@@ -17,14 +17,14 @@ type cli struct {
 	app *cliPkg.App
 }
 
-func (c *cli) init() {
+func (c *cli) setUp() {
 	c.os = runtime.GOOS
 	c.app = cliPkg.NewApp()
-	c.initBasic()
-	c.initCommands()
+	c.setBasic()
+	c.setCommands()
 }
 
-func (c *cli) initBasic() {
+func (c *cli) setBasic() {
 	c.app.Name = name
 	c.app.Usage = usage
 	c.app.Version = version
@@ -36,7 +36,7 @@ const (
 	version = "0.0.1"
 )
 
-func (c *cli) initCommands() {
+func (c *cli) setCommands() {
 	c.app.Commands = []cliPkg.Command{
 		cliPkg.Command{
 			Name:   "create",
