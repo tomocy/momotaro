@@ -5,6 +5,7 @@ import (
 
 	kibidangoPkg "github.com/tomocy/kibidango"
 	factoryPkg "github.com/tomocy/kibidango/factory"
+	"github.com/tomocy/momotaro/spec"
 )
 
 type linux struct{}
@@ -28,9 +29,9 @@ func (l *linux) adaptAll(kibis []*kibidangoPkg.Linux) []kibidango {
 	return adapteds
 }
 
-func (l *linux) create(id string) (kibidango, error) {
+func (l *linux) create(spec *spec.Spec) (kibidango, error) {
 	factory := l.factory()
-	kibi, err := factory.Manufacture(id)
+	kibi, err := factory.Manufacture(spec.ID)
 	if err != nil {
 		return nil, err
 	}

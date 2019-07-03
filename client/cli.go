@@ -3,6 +3,7 @@ package client
 import (
 	"runtime"
 
+	"github.com/tomocy/momotaro/spec"
 	cliPkg "github.com/urfave/cli"
 )
 
@@ -82,15 +83,24 @@ func (c *cli) list(ctx *cliPkg.Context) error {
 }
 
 func (c *cli) create(ctx *cliPkg.Context) error {
-	id := ctx.Args().First()
 	factory := c.factory()
+	spec, err := c.loadSpec("./config.json")
+	if err != nil {
+		return err
+	}
+	spec.ID = ctx.Args().First()
 
-	kibi, err := factory.create(id)
+	kibi, err := factory.create(spec)
 	if err != nil {
 		return err
 	}
 
-	return kibi.Run("init", id)
+	return kibi.Run("init", spec.ID)
+}
+
+func (c *cli) loadSpec(name string) (*spec.Spec, error) {
+	loader := new(spec.OCI)
+	return loader.Load(name)
 }
 
 func (c *cli) init(ctx *cliPkg.Context) error {

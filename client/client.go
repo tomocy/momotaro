@@ -1,6 +1,10 @@
 package client
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/tomocy/momotaro/spec"
+)
 
 func New() *Client {
 	return &Client{
@@ -30,7 +34,7 @@ func newFactory(os string) factory {
 
 type factory interface {
 	list() ([]kibidango, error)
-	create(id string) (kibidango, error)
+	create(spec *spec.Spec) (kibidango, error)
 	load(id string) (kibidango, error)
 	delete(id string) error
 }
