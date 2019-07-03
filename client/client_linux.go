@@ -1,6 +1,8 @@
 package client
 
 import (
+	"fmt"
+
 	kibidangoPkg "github.com/tomocy/kibidango"
 	factoryPkg "github.com/tomocy/kibidango/factory"
 )
@@ -47,4 +49,16 @@ func (l *linux) load(id string) (kibidango, error) {
 
 func (l *linux) factory() *factoryPkg.Linux {
 	return factoryPkg.ForLinux()
+}
+
+func (l *linux) print(kibi kibidango) {
+	linux := kibi.(*kibidangoPkg.Linux)
+	printable := printableLinux(*linux)
+	fmt.Println(printable)
+}
+
+type printableLinux kibidangoPkg.Linux
+
+func (p printableLinux) String() string {
+	return fmt.Sprintf("%s", p.ID())
 }
