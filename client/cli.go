@@ -39,6 +39,10 @@ const (
 func (c *cli) setCommands() {
 	c.app.Commands = []cliPkg.Command{
 		cliPkg.Command{
+			Name:   "list",
+			Action: c.list,
+		},
+		cliPkg.Command{
 			Name:   "create",
 			Action: c.create,
 		},
@@ -51,6 +55,21 @@ func (c *cli) setCommands() {
 
 func (c *cli) Run(args []string) error {
 	return c.app.Run(args)
+}
+
+func (c *cli) list(ctx *cliPkg.Context) error {
+	factory := c.factory()
+	kibis, err := factory.list()
+	if err != nil {
+		return err
+	}
+
+	printer := c.printer()
+	for _, kibi := range kibis {
+		printer.print(kibi)
+	}
+
+	return nil
 }
 
 func (c *cli) create(ctx *cliPkg.Context) error {
@@ -79,4 +98,8 @@ func (c *cli) init(ctx *cliPkg.Context) error {
 
 func (c *cli) factory() factory {
 	return newFactory(c.os)
+}
+
+func (c *cli) printer() printer {
+	return newPrinter(c.os)
 }
