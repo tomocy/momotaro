@@ -65,9 +65,7 @@ func (c *cli) list(ctx *cliPkg.Context) error {
 	}
 
 	printer := c.printer()
-	for _, kibi := range kibis {
-		printer.print(kibi)
-	}
+	printer.printAll(kibis)
 
 	return nil
 }
