@@ -7,7 +7,7 @@ import (
 type linux struct{}
 
 func (l *linux) create(id string) error {
-	factory := factoryPkg.ForLinux()
+	factory := l.factory()
 	kibi, err := factory.Manufacture(id)
 	if err != nil {
 		return err
@@ -17,4 +17,8 @@ func (l *linux) create(id string) error {
 	}
 
 	return factory.Save(kibi)
+}
+
+func (l *linux) factory() *factoryPkg.Linux {
+	return factoryPkg.ForLinux()
 }
