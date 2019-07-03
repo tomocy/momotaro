@@ -50,6 +50,10 @@ func (c *cli) setCommands() {
 			Name:   "init",
 			Action: c.init,
 		},
+		cliPkg.Command{
+			Name:   "delete",
+			Action: c.delete,
+		},
 	}
 }
 
@@ -92,6 +96,13 @@ func (c *cli) init(ctx *cliPkg.Context) error {
 	}
 
 	return kibi.Init()
+}
+
+func (c *cli) delete(ctx *cliPkg.Context) error {
+	id := ctx.Args().First()
+	factory := c.factory()
+
+	return factory.delete(id)
 }
 
 func (c *cli) factory() factory {
