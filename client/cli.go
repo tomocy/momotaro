@@ -40,19 +40,26 @@ func (c *cli) setCommands() {
 	c.app.Commands = []cliPkg.Command{
 		cliPkg.Command{
 			Name:   "list",
+			Usage:  "list all kibidangos",
 			Action: c.list,
 		},
 		cliPkg.Command{
-			Name:   "create",
-			Action: c.create,
+			Name:      "create",
+			Usage:     "create a kibidango with give id",
+			ArgsUsage: "id",
+			Action:    c.create,
 		},
 		cliPkg.Command{
-			Name:   "init",
-			Action: c.init,
+			Name:      "init",
+			Usage:     "initialize a kibidango with given id",
+			ArgsUsage: "id",
+			Action:    c.init,
 		},
 		cliPkg.Command{
-			Name:   "delete",
-			Action: c.delete,
+			Name:      "delete",
+			Usage:     "delete a kibidango with given id",
+			ArgsUsage: "id",
+			Action:    c.delete,
 		},
 	}
 }
