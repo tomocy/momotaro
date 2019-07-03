@@ -51,6 +51,13 @@ func (l *linux) factory() *factoryPkg.Linux {
 	return factoryPkg.ForLinux()
 }
 
+func (l *linux) printAll(kibis []kibidango) {
+	printHeader()
+	for _, kibi := range kibis {
+		l.print(kibi)
+	}
+}
+
 func (l *linux) print(kibi kibidango) {
 	linux := kibi.(*kibidangoPkg.Linux)
 	printable := printableLinux(*linux)

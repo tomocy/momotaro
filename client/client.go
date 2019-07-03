@@ -1,5 +1,7 @@
 package client
 
+import "fmt"
+
 func New() *Client {
 	return &Client{
 		runner: newCLI(),
@@ -41,6 +43,7 @@ func newPrinter(os string) printer {
 }
 
 type printer interface {
+	printAll(kibis []kibidango)
 	print(kibi kibidango)
 }
 
@@ -61,3 +64,7 @@ func newOnOS(os string) interface{} {
 const (
 	osLinux = "linux"
 )
+
+func printHeader() {
+	fmt.Println("ID")
+}
