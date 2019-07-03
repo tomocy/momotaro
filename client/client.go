@@ -33,6 +33,19 @@ type factory interface {
 	load(id string) (kibidango, error)
 }
 
+func newPrinter(os string) printer {
+	switch os {
+	case osLinux:
+		return new(linux)
+	default:
+		return nil
+	}
+}
+
+type printer interface {
+	print(kibi kibidango)
+}
+
 type kibidango interface {
 	Run(args ...string) error
 	Init() error
