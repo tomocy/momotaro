@@ -72,5 +72,6 @@ func (l *linux) print(kibi kibidango) {
 type printableLinux kibidangoPkg.Linux
 
 func (p printableLinux) String() string {
-	return fmt.Sprintf("%s", p.ID())
+	spec := p.Spec()
+	return fmt.Sprintf("%s", spec.ID)
 }
