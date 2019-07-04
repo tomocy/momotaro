@@ -3,7 +3,7 @@ package client
 import (
 	"fmt"
 
-	"github.com/tomocy/momotaro/spec"
+	kibidangoPkg "github.com/tomocy/kibidango"
 )
 
 func New() *Client {
@@ -34,7 +34,7 @@ func newFactory(os string) factory {
 
 type factory interface {
 	list() ([]kibidango, error)
-	create(spec *spec.Spec) (kibidango, error)
+	create(spec *kibidangoPkg.Spec) (kibidango, error)
 	load(id string) (kibidango, error)
 	delete(id string) error
 }

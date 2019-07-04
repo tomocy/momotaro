@@ -10,7 +10,7 @@ import (
 
 type OCI struct{}
 
-func (o *OCI) Load(name string) (*Spec, error) {
+func (o *OCI) Load(name string) (*kibidango.Spec, error) {
 	src, err := os.Open(name)
 	if err != nil {
 		return nil, err
@@ -25,8 +25,8 @@ func (o *OCI) Load(name string) (*Spec, error) {
 	return o.adapt(ociSpec), nil
 }
 
-func (o *OCI) adapt(ociSpec *specs.Spec) *Spec {
-	return &Spec{
+func (o *OCI) adapt(ociSpec *specs.Spec) *kibidango.Spec {
+	return &kibidango.Spec{
 		Process: &kibidango.Process{
 			Args: ociSpec.Process.Args,
 		},

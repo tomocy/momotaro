@@ -3,6 +3,7 @@ package client
 import (
 	"runtime"
 
+	kibidangoPkg "github.com/tomocy/kibidango"
 	"github.com/tomocy/momotaro/spec"
 	cliPkg "github.com/urfave/cli"
 )
@@ -98,7 +99,7 @@ func (c *cli) create(ctx *cliPkg.Context) error {
 	return kibi.Run("init", spec.ID)
 }
 
-func (c *cli) loadSpec(name string) (*spec.Spec, error) {
+func (c *cli) loadSpec(name string) (*kibidangoPkg.Spec, error) {
 	loader := new(spec.OCI)
 	return loader.Load(name)
 }

@@ -5,7 +5,6 @@ import (
 
 	kibidangoPkg "github.com/tomocy/kibidango"
 	factoryPkg "github.com/tomocy/kibidango/factory"
-	"github.com/tomocy/momotaro/spec"
 )
 
 type linux struct{}
@@ -29,13 +28,13 @@ func (l *linux) adaptAll(kibis []*kibidangoPkg.Linux) []kibidango {
 	return adapteds
 }
 
-func (l *linux) create(spec *spec.Spec) (kibidango, error) {
+func (l *linux) create(spec *kibidangoPkg.Spec) (kibidango, error) {
 	factory := l.factory()
 	kibi, err := factory.Manufacture(spec.ID)
 	if err != nil {
 		return nil, err
 	}
-	if err := l.letKibidangoMeetSpec(kibi, spec); err != nil {
+	if err := kibi.Meet(spec); err != nil {
 		return nil, err
 	}
 
@@ -44,10 +43,6 @@ func (l *linux) create(spec *spec.Spec) (kibidango, error) {
 	}
 
 	return kibi, nil
-}
-
-func (l *linux) letKibidangoMeetSpec(kibi *kibidangoPkg.Linux, spec *spec.Spec) error {
-	return kibi.UpdateProcess(spec.Process)
 }
 
 func (l *linux) load(id string) (kibidango, error) {
