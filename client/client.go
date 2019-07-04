@@ -25,7 +25,7 @@ func (c *Client) Run(args []string) error {
 }
 
 func newFactory(os string) factory {
-	if factory, ok := newOnOS(os).(factory); ok {
+	if factory, ok := newFor(os).(factory); ok {
 		return factory
 	}
 
@@ -40,7 +40,7 @@ type factory interface {
 }
 
 func newPrinter(os string) printer {
-	if printer, ok := newOnOS(os).(printer); ok {
+	if printer, ok := newFor(os).(printer); ok {
 		return printer
 	}
 
@@ -57,7 +57,7 @@ type kibidango interface {
 	Init() error
 }
 
-func newOnOS(os string) interface{} {
+func newFor(os string) interface{} {
 	switch os {
 	case osLinux:
 		return new(linux)
