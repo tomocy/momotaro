@@ -30,11 +30,8 @@ func (l *linux) adaptAll(kibis []*kibidangoPkg.Linux) []kibidango {
 
 func (l *linux) create(spec *kibidangoPkg.Spec) (kibidango, error) {
 	factory := l.factory()
-	kibi, err := factory.Manufacture(spec.ID)
+	kibi, err := factory.Manufacture(spec)
 	if err != nil {
-		return nil, err
-	}
-	if err := kibi.Meet(spec); err != nil {
 		return nil, err
 	}
 
