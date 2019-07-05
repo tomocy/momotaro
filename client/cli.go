@@ -56,6 +56,7 @@ func (c *cli) setCommands() {
 			Usage:     "initialize a kibidango with given id",
 			ArgsUsage: "id",
 			Action:    c.init,
+			Hidden:    true,
 		},
 		cliPkg.Command{
 			Name:      "delete",
