@@ -55,6 +55,7 @@ type printer interface {
 type kibidango interface {
 	Run(args ...string) error
 	Init() error
+	Exec() error
 }
 
 func newFor(os string) interface{} {
