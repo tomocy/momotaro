@@ -102,8 +102,11 @@ func (c *cli) create(ctx *cliPkg.Context) error {
 	if err != nil {
 		return err
 	}
+	if err := kibi.Run("init", spec.ID); err != nil {
+		return err
+	}
 
-	return kibi.Run("init", spec.ID)
+	return factory.save(kibi)
 }
 
 func (c *cli) loadSpec(name string) (*kibidangoPkg.Spec, error) {

@@ -42,6 +42,13 @@ func (l *linux) create(spec *kibidangoPkg.Spec) (kibidango, error) {
 	return kibi, nil
 }
 
+func (l *linux) save(kibi kibidango) error {
+	factory := l.factory()
+	linux := kibi.(*kibidangoPkg.Linux)
+
+	return factory.Save(linux)
+}
+
 func (l *linux) load(id string) (kibidango, error) {
 	factory := l.factory()
 	return factory.Load(id)

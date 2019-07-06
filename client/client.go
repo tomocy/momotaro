@@ -35,6 +35,7 @@ func newFactory(os string) factory {
 type factory interface {
 	list() ([]kibidango, error)
 	create(spec *kibidangoPkg.Spec) (kibidango, error)
+	save(kibi kibidango) error
 	load(id string) (kibidango, error)
 	delete(id string) error
 }
