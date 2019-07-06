@@ -59,12 +59,6 @@ func (c *cli) setCommands() {
 			Hidden:    true,
 		},
 		cliPkg.Command{
-			Name:      "start",
-			Usage:     "start the command kibidango is waiting to exec",
-			ArgsUsage: "id",
-			Action:    c.start,
-		},
-		cliPkg.Command{
 			Name:      "delete",
 			Usage:     "delete a kibidango with given id",
 			ArgsUsage: "id",
@@ -124,18 +118,6 @@ func (c *cli) init(ctx *cliPkg.Context) error {
 	}
 
 	return kibi.Init()
-}
-
-func (c *cli) start(ctx *cliPkg.Context) error {
-	id := ctx.Args().First()
-	factory := c.factory()
-
-	kibi, err := factory.load(id)
-	if err != nil {
-		return err
-	}
-
-	return kibi.Exec()
 }
 
 func (c *cli) delete(ctx *cliPkg.Context) error {
