@@ -1,7 +1,9 @@
 package client
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
 	"github.com/olekukonko/tablewriter"
 	kibidangoPkg "github.com/tomocy/kibidango"
@@ -57,6 +59,7 @@ type kibidango interface {
 	Run(args ...string) error
 	Init() error
 	Exec() error
+	Spec() *kibidangoPkg.Spec
 }
 
 func newFor(os string) interface{} {
@@ -77,4 +80,25 @@ func tableWriter() *tablewriter.Table {
 	table.SetHeader([]string{"ID", "PID", "Command"})
 
 	return table
+}
+
+type table struct{}
+
+func (t *table) printAll(kibis []kibidango) {
+	writer := tablewriter.NewWriter(os.Stdout)
+	writer.SetHeader([]string{"ID", "PID", "Command"})
+	for _, kibi := range kibis {
+		joined := t.joinSpec(kibi.Spec())
+		writer.Append(joined)
+	}
+
+	writer.Render()
+}
+
+func (t *table) joinSpec(spec *kibidangoPkg.Spec) []string {
+	return []string{
+		spec.ID,
+		fmt.Sprintf("%d", spec.Process.ID),
+		strings.Join(spec.Process.Args, " "),
+	}
 }
