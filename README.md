@@ -16,3 +16,7 @@ docker run -it -v $GOPATH:/go -w /go/src/github.com/tomocy/momotaro --rm --privi
     ```
     go run main.go start ${container id}
     ```
+- delete a kibidango
+    ```
+    go run main.go delete ${container id}
+    ```
