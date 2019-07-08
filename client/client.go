@@ -43,13 +43,18 @@ type factory interface {
 	delete(id string) error
 }
 
-func newPrinter(os string) printer {
-	if printer, ok := newFor(os).(printer); ok {
-		return printer
+func newPrinter(fmt string) printer {
+	switch fmt {
+	case fmtTable:
+		return new(table)
+	default:
+		return nil
 	}
-
-	return nil
 }
+
+const (
+	fmtTable = "table"
+)
 
 type printer interface {
 	printAll(kibis []kibidango)
@@ -74,13 +79,6 @@ func newFor(os string) interface{} {
 const (
 	osLinux = "linux"
 )
-
-func tableWriter() *tablewriter.Table {
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"ID", "PID", "Command"})
-
-	return table
-}
 
 type table struct{}
 

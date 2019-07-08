@@ -150,5 +150,5 @@ func (c *cli) factory() factory {
 }
 
 func (c *cli) printer() printer {
-	return newPrinter(c.os)
+	return newPrinter(fmtTable)
 }

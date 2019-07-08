@@ -1,9 +1,6 @@
 package client
 
 import (
-	"fmt"
-	"strings"
-
 	kibidangoPkg "github.com/tomocy/kibidango"
 	factoryPkg "github.com/tomocy/kibidango/factory"
 )
@@ -62,26 +59,4 @@ func (l *linux) delete(id string) error {
 
 func (l *linux) factory() *factoryPkg.Linux {
 	return factoryPkg.ForLinux()
-}
-
-func (l *linux) printAll(kibis []kibidango) {
-	table := tableWriter()
-	for _, kibi := range kibis {
-		linux := kibi.(*kibidangoPkg.Linux)
-		printable := printableLinux(*linux)
-		table.Append(printable.row())
-	}
-
-	table.Render()
-}
-
-type printableLinux kibidangoPkg.Linux
-
-func (p printableLinux) row() []string {
-	spec := p.Spec()
-	return []string{
-		spec.ID,
-		fmt.Sprintf("%d", spec.Process.ID),
-		strings.Join(spec.Process.Args, " "),
-	}
 }
