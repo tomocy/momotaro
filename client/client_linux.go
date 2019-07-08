@@ -69,7 +69,7 @@ func (l *linux) printAll(kibis []kibidango) {
 	for _, kibi := range kibis {
 		linux := kibi.(*kibidangoPkg.Linux)
 		printable := printableLinux(*linux)
-		table.Append(printable.column())
+		table.Append(printable.row())
 	}
 
 	table.Render()
@@ -77,7 +77,7 @@ func (l *linux) printAll(kibis []kibidango) {
 
 type printableLinux kibidangoPkg.Linux
 
-func (p printableLinux) column() []string {
+func (p printableLinux) row() []string {
 	spec := p.Spec()
 	return []string{
 		spec.ID,
