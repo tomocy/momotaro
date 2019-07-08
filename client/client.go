@@ -1,8 +1,9 @@
 package client
 
 import (
-	"fmt"
+	"os"
 
+	"github.com/olekukonko/tablewriter"
 	kibidangoPkg "github.com/tomocy/kibidango"
 )
 
@@ -50,7 +51,6 @@ func newPrinter(os string) printer {
 
 type printer interface {
 	printAll(kibis []kibidango)
-	print(kibi kibidango)
 }
 
 type kibidango interface {
@@ -72,6 +72,9 @@ const (
 	osLinux = "linux"
 )
 
-func printHeader() {
-	fmt.Println("ID")
+func tableWriter() *tablewriter.Table {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"ID", "PID", "Command"})
+
+	return table
 }

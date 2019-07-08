@@ -2,6 +2,7 @@ package client
 
 import (
 	"fmt"
+	"strings"
 
 	kibidangoPkg "github.com/tomocy/kibidango"
 	factoryPkg "github.com/tomocy/kibidango/factory"
@@ -64,21 +65,23 @@ func (l *linux) factory() *factoryPkg.Linux {
 }
 
 func (l *linux) printAll(kibis []kibidango) {
-	printHeader()
+	table := tableWriter()
 	for _, kibi := range kibis {
-		l.print(kibi)
+		linux := kibi.(*kibidangoPkg.Linux)
+		printable := printableLinux(*linux)
+		table.Append(printable.column())
 	}
-}
 
-func (l *linux) print(kibi kibidango) {
-	linux := kibi.(*kibidangoPkg.Linux)
-	printable := printableLinux(*linux)
-	fmt.Println(printable)
+	table.Render()
 }
 
 type printableLinux kibidangoPkg.Linux
 
-func (p printableLinux) String() string {
+func (p printableLinux) column() []string {
 	spec := p.Spec()
-	return fmt.Sprintf("%s", spec.ID)
+	return []string{
+		spec.ID,
+		fmt.Sprintf("%d", spec.Process.ID),
+		strings.Join(spec.Process.Args, " "),
+	}
 }
