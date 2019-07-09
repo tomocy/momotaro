@@ -19,6 +19,9 @@ docker run -it -v $GOPATH:/go -w /go/src/github.com/tomocy/momotaro --rm --privi
 - start a kibidango
     ```
     go run main.go start ${container id}
+- kill a kibidango of the given id with given signal
+    ```
+    go run main.go kill ${container id} ${signal}
     ```
 - delete a kibidango
     ```
