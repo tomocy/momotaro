@@ -67,7 +67,7 @@ func (c *cli) setCommands() {
 		},
 		cliPkg.Command{
 			Name:      "kill",
-			Usage:     "send a signal to a kibidango with given id",
+			Usage:     "kill a kibidango of given id with given signal",
 			ArgsUsage: "id signal(default: SIGTERM)",
 			Action:    c.kill,
 		},
