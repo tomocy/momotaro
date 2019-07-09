@@ -1,6 +1,7 @@
 package client
 
 import (
+	"os"
 	"runtime"
 
 	kibidangoPkg "github.com/tomocy/kibidango"
@@ -63,6 +64,12 @@ func (c *cli) setCommands() {
 			Usage:     "start a command kibidango is waiting to exec",
 			ArgsUsage: "id",
 			Action:    c.start,
+		},
+		cliPkg.Command{
+			Name:      "kill",
+			Usage:     "send a signal to a kibidango with given id",
+			ArgsUsage: "id signal(default: SIGTERM)",
+			Action:    c.kill,
 		},
 		cliPkg.Command{
 			Name:      "delete",
@@ -136,6 +143,31 @@ func (c *cli) start(ctx *cliPkg.Context) error {
 	}
 
 	return kibi.Exec()
+}
+
+func (c *cli) kill(ctx *cliPkg.Context) error {
+	id := ctx.Args().First()
+	signal, err := c.parseSignal(ctx)
+	if err != nil {
+		return err
+	}
+	factory := c.factory()
+
+	kibi, err := factory.load(id)
+	if err != nil {
+		return err
+	}
+
+	return kibi.Kill(signal)
+}
+
+func (c *cli) parseSignal(ctx *cliPkg.Context) (os.Signal, error) {
+	sigStr := ctx.Args().Get(1)
+	if sigStr == "" {
+		sigStr = sigterm
+	}
+
+	return parseSignal(sigStr)
 }
 
 func (c *cli) delete(ctx *cliPkg.Context) error {
