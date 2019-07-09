@@ -3,7 +3,9 @@ package client
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
+	"syscall"
 
 	"github.com/olekukonko/tablewriter"
 	kibidangoPkg "github.com/tomocy/kibidango"
@@ -64,6 +66,7 @@ type kibidango interface {
 	Run(args ...string) error
 	Init() error
 	Exec() error
+	Kill(sig os.Signal) error
 	Spec() *kibidangoPkg.Spec
 }
 
@@ -100,3 +103,46 @@ func (t *table) joinSpec(spec *kibidangoPkg.Spec) []string {
 		strings.Join(spec.Process.Args, " "),
 	}
 }
+
+func parseSignal(target string) (os.Signal, error) {
+	if num, err := strconv.Atoi(target); err == nil {
+		return syscall.Signal(num), nil
+	}
+
+	trimed := strings.TrimLeft(strings.ToUpper(target), "SIG")
+	if signal, ok := signals[trimed]; ok {
+		return signal, nil
+	}
+
+	return nil, fmt.Errorf("no such signal")
+}
+
+var signals = map[string]os.Signal{
+	sighup:  syscall.SIGHUP,
+	sigint:  syscall.SIGINT,
+	sigquit: syscall.SIGQUIT,
+	sigill:  syscall.SIGILL,
+	sigtrap: syscall.SIGTRAP,
+	sigabrt: syscall.SIGABRT,
+	sigfpe:  syscall.SIGFPE,
+	sigkill: syscall.SIGKILL,
+	sigsegv: syscall.SIGSEGV,
+	sigpipe: syscall.SIGPIPE,
+	sigalrm: syscall.SIGALRM,
+	sigterm: syscall.SIGTERM,
+}
+
+const (
+	sighup  = "HUP"
+	sigint  = "INT"
+	sigquit = "QUIT"
+	sigill  = "ILL"
+	sigtrap = "TRAP"
+	sigabrt = "ABRT"
+	sigfpe  = "FPE"
+	sigkill = "KILL"
+	sigsegv = "SEGV"
+	sigpipe = "PIPE"
+	sigalrm = "ALRM"
+	sigterm = "TERM"
+)
