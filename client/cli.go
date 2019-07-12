@@ -91,7 +91,7 @@ func (c *cli) list(ctx *cliPkg.Context) error {
 		return err
 	}
 
-	printer := c.printer()
+	printer := c.printer(fmtTable)
 	printer.printAll(kibis)
 
 	return nil
@@ -181,6 +181,6 @@ func (c *cli) factory() factory {
 	return newFactory(c.os)
 }
 
-func (c *cli) printer() printer {
-	return newPrinter(fmtTable)
+func (c *cli) printer(fmt string) printer {
+	return newPrinter(fmt)
 }
