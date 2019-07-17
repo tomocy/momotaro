@@ -27,7 +27,7 @@ func (o *OCI) Load(name string) (*kibidango.Spec, error) {
 
 func (o *OCI) adapt(ociSpec *specs.Spec) *kibidango.Spec {
 	return &kibidango.Spec{
-		Root: "/root/kibidangos",
+		Root: ociSpec.Root.Path,
 		Process: &kibidango.Process{
 			Args: ociSpec.Process.Args,
 		},
